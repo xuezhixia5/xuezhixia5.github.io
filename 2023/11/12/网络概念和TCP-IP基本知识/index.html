@@ -30,13 +30,10 @@
 <meta property="og:site_name" content="xuezhixia5&#39;s blog">
 <meta property="og:description" content="1.计算机网络的概念与TCP&#x2F;IP协议将分散的、具有独立功能的计算机系统，通过通信设备与线路连接起来，由功能完善的软件实现资源共享和信息传递的系统。 2.互联网与万维网万维网（英语：World Wide Web）亦作WWW、Web、全球广域网，是一个透过互联网访问的，由许多互相链接的超文本组成的信息系统[1]。 互联网（Internet)是一个全球互相连接的电脑网络系统。 相较之下，万维">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/1.png">
-<meta property="og:image" content="http://example.com/2.png">
 <meta property="article:published_time" content="2023-11-11T16:13:03.000Z">
-<meta property="article:modified_time" content="2023-11-11T16:20:02.064Z">
+<meta property="article:modified_time" content="2023-11-11T16:35:03.794Z">
 <meta property="article:author" content="xuezhixia5">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/1.png">
     
         <link rel="alternate" href="/atom.xml" title="xuezhixia5's blog" type="application/atom+xml">
     
@@ -259,11 +256,8 @@
 </tr>
 </tbody></table>
 <p>TCP&#x2F;IP协议是Internet互联网最基本的协议，其在一定程度上参考了七层ISO模型。OSI模型共有七层，从下到上分别是物理层、数据链路层、网络层、运输层、会话层、表示层和应用层。但是这显然是有些复杂的，所以在TCP&#x2F;IP协议中，七层被简化为了四个层次。TCP&#x2F;IP模型中的各种协议，依其功能不同，被分别归属到这四层之中，常被视为是简化过后的七层OSI模型。</p>
-<p>TCP&#x2F;IP协议与七层ISO模型的对应关系<br>TCP&#x2F;IP协议与七层ISO模型的对应关系，大致如下图所示：</p>
-<p><img src="/1.png"></p>
-<p><img src="/2.png"></p>
-<h3 id="（一）TCP-IP协议的应用层"><a href="#（一）TCP-IP协议的应用层" class="headerlink" title="（一）TCP&#x2F;IP协议的应用层"></a>（一）TCP&#x2F;IP协议的应用层</h3><p>应用层包括所有和应用程序协同工作，并利用<strong>基础网络交换应用程序的业务数据的协议</strong>。一些特定的程序被认为运行在这个层上，该层协议所提供的服务能直接支持用户应用。<strong>应用层协议包括HTTP（万维网服务）、FTP（文件传输）、SMTP（电子邮件）、SSH（安全远程登陆）、DNS（域名解析）以及许多其他协议。</strong></p>
-<h3 id="（二）TCP-IP协议的传输层"><a href="#（二）TCP-IP协议的传输层" class="headerlink" title="（二）TCP&#x2F;IP协议的传输层"></a>（二）TCP&#x2F;IP协议的传输层</h3><p>传输层的协议，解决了诸如端到端可靠性问题，能确保数据可靠的到达目的地，甚至能保证数据按照正确的顺序到达目的地。</p>
+<h3 id="（一）TCP-IP协议的应用层（HTTP-FTP-SMTP-SSH-DNS"><a href="#（一）TCP-IP协议的应用层（HTTP-FTP-SMTP-SSH-DNS" class="headerlink" title="（一）TCP&#x2F;IP协议的应用层（HTTP&#x2F;FTP&#x2F;SMTP&#x2F;SSH&#x2F;DNS)"></a>（一）TCP&#x2F;IP协议的应用层（HTTP&#x2F;FTP&#x2F;SMTP&#x2F;SSH&#x2F;DNS)</h3><p>应用层包括所有和应用程序协同工作，并利用<strong>基础网络交换应用程序的业务数据的协议</strong>。一些特定的程序被认为运行在这个层上，该层协议所提供的服务能直接支持用户应用。<strong>应用层协议包括HTTP（万维网服务）、FTP（文件传输）、SMTP（电子邮件）、SSH（安全远程登陆）、DNS（域名解析）以及许多其他协议。</strong></p>
+<h3 id="（二）TCP-IP协议的传输层-TCP-UDP协议"><a href="#（二）TCP-IP协议的传输层-TCP-UDP协议" class="headerlink" title="（二）TCP&#x2F;IP协议的传输层(TCP&#x2F;UDP协议)"></a>（二）TCP&#x2F;IP协议的传输层(TCP&#x2F;UDP协议)</h3><p>传输层的协议，解决了诸如端到端可靠性问题，能确保数据可靠的到达目的地，甚至能保证数据按照正确的顺序到达目的地。</p>
 <p>传输层的主要功能大致如下：</p>
 <p>（1）为端到端连接提供传输服务；</p>
 <p>（2）这种传输服务分为可靠和不可靠的，其中TCP是典型的可靠传输，而UDP则是不可靠传输；</p>
@@ -272,15 +266,15 @@
 <p>TCP协议是一个面向连接的、可靠的传输协议，它提供一种可靠的字节流，能保证数据完整、无损并且按顺序到达。TCP尽量连续不断地测试网络的负载并且控制发送数据的速度以避免网络过载。另外，TCP试图将数据按照规定的顺序发送。</p>
 <p>UDP协议是一个无连接的数据报协议，是一个“尽力传递”和“不可靠”协议，不会对数据包是否已经到达目的地进行检查，并且不保证数据包按顺序到达。</p>
 <p><strong>总体来说，TCP协议传输效率低，但可靠性强；UDP协议传输效率高，但可靠性略低，适用于传输可靠性要求不高、体量小的数据（比如QQ聊天数据）。</strong></p>
-<h3 id="（三）TCP-IP协议的网络层"><a href="#（三）TCP-IP协议的网络层" class="headerlink" title="（三）TCP&#x2F;IP协议的网络层"></a>（三）TCP&#x2F;IP协议的网络层</h3><p>TCP&#x2F;IP协议网络层的作用是在复杂的网络环境中为要发送的数据报找到一个合适的路径进行传输。</p>
+<h3 id="（三）TCP-IP协议的网络层-ICMP-IP-IGMP"><a href="#（三）TCP-IP协议的网络层-ICMP-IP-IGMP" class="headerlink" title="（三）TCP&#x2F;IP协议的网络层(ICMP&#x2F;IP&#x2F;IGMP)"></a>（三）TCP&#x2F;IP协议的网络层(ICMP&#x2F;IP&#x2F;IGMP)</h3><p>TCP&#x2F;IP协议网络层的作用是在复杂的网络环境中为要发送的数据报找到一个合适的路径进行传输。</p>
 <p><strong>简单来说，网络层负责将数据传输到目标地址，目标地址可以是多个网络通过路由器连接而成的某一个地址。</strong></p>
 <p>另外，网络层负责寻找合适的路径到达对方计算机，并把数据帧传送给对方，网络层还可以实现拥塞控制、网际互连等功能。网络层协议的代表包括：ICMP、IP、IGMP等。</p>
-<h3 id="（四）TCP-IP协议的链路层"><a href="#（四）TCP-IP协议的链路层" class="headerlink" title="（四）TCP&#x2F;IP协议的链路层"></a>（四）TCP&#x2F;IP协议的链路层</h3><p>链路层有时也称作数据链路层或网络接口层，用来处理连接网络的硬件部分。该层既包括操作系统硬件的设备驱动、NIC（网卡）、光纤等物理可见部分，还包括连接器等一切传输媒介。在这一层，数据的传输单位为比特。其主要协议有ARP、RARP等。、</p>
+<h3 id="（四）TCP-IP协议的链路层-ARP-DARP"><a href="#（四）TCP-IP协议的链路层-ARP-DARP" class="headerlink" title="（四）TCP&#x2F;IP协议的链路层(ARP&#x2F;DARP)"></a>（四）TCP&#x2F;IP协议的链路层(ARP&#x2F;DARP)</h3><p>链路层有时也称作数据链路层或网络接口层，用来处理连接网络的硬件部分。该层既包括操作系统硬件的设备驱动、NIC（网卡）、光纤等物理可见部分，还包括连接器等一切传输媒介。在这一层，数据的传输单位为比特。其主要协议有ARP、RARP等。、</p>
 <h3 id="（五）物理层：使用MAC解决设备的身份证问题"><a href="#（五）物理层：使用MAC解决设备的身份证问题" class="headerlink" title="（五）物理层：使用MAC解决设备的身份证问题"></a>（五）物理层：使用MAC解决设备的身份证问题</h3><h3 id="详情请点击这里"><a href="#详情请点击这里" class="headerlink" title="详情请点击这里"></a><a target="_blank" rel="noopener" href="https://blog.csdn.net/stone_tmp/article/details/118386484?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169971642816800188533495%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=169971642816800188533495&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-118386484-null-null.142%5Ev96%5Epc_search_result_base3&utm_term=tcpip%E5%8D%8F%E8%AE%AE&spm=1018.2226.3001.4187">详情请点击这里</a></h3><h3 id="（含交换机、路由器、IP地址、子网、路由表、TCP报文格式、三次握手、四次挥手）"><a href="#（含交换机、路由器、IP地址、子网、路由表、TCP报文格式、三次握手、四次挥手）" class="headerlink" title="（含交换机、路由器、IP地址、子网、路由表、TCP报文格式、三次握手、四次挥手）"></a>（含交换机、路由器、IP地址、子网、路由表、TCP报文格式、三次握手、四次挥手）</h3>
             
         </div>
         <footer class="article-footer">
-            <a data-url="http://example.com/2023/11/12/%E7%BD%91%E7%BB%9C%E6%A6%82%E5%BF%B5%E5%92%8CTCP-IP%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/" data-id="clou973380002yozceqos4i1w" data-title="网络概念和TCP/IP基本知识"
+            <a data-url="http://example.com/2023/11/12/%E7%BD%91%E7%BB%9C%E6%A6%82%E5%BF%B5%E5%92%8CTCP-IP%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/" data-id="clou9ps1y0001mkzc1ubw5ejs" data-title="网络概念和TCP/IP基本知识"
                class="article-share-link">分享</a>
             
             
