@@ -1,0 +1,676 @@
+
+    <!DOCTYPE html>
+    <html lang="zh-CN"
+            
+          
+    >
+    <head>
+    <meta charset="utf-8">
+    
+
+    
+
+    
+    <title>
+        详细阐述通信原理 |
+        
+        大帅哥的博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CUbuntu%20Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+    
+<link rel="stylesheet" href="https://unpkg.com/@fortawesome/fontawesome-free/css/v4-font-face.min.css">
+
+    
+<link rel="stylesheet" href="/css/loader.css">
+
+    <meta name="description" content="1.集线器的诞生两个电脑可以用一根网线连接起来。如下图  随着越来越多的人加入，你发现身上开的网口实在太多了，而且网线密密麻麻，混乱不堪。 于是你们发明了一个中间设备，你们将网线都插到这个设备上，由这个设备做转发  你给它取名叫集线器，它仅仅是无脑将电信号转发到所有出口（广播），不做任何处理，你觉得它是没有智商的，因此把人家定性在了物理层。  由于转发到了所有出口，那 BCDE 四台机器怎么知道数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="详细阐述通信原理">
+<meta property="og:url" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="大帅哥的博客">
+<meta property="og:description" content="1.集线器的诞生两个电脑可以用一根网线连接起来。如下图  随着越来越多的人加入，你发现身上开的网口实在太多了，而且网线密密麻麻，混乱不堪。 于是你们发明了一个中间设备，你们将网线都插到这个设备上，由这个设备做转发  你给它取名叫集线器，它仅仅是无脑将电信号转发到所有出口（广播），不做任何处理，你觉得它是没有智商的，因此把人家定性在了物理层。  由于转发到了所有出口，那 BCDE 四台机器怎么知道数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/39521da6b6b2983a38ca8fe2525ba56e.gif">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/970a442a05739100c46b73c0fc371f90.jpg">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/39521da6b6b2983a38ca8fe2525ba56e-1699779489280.gif">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/f5f214620c73ce95ce6018ac5b0e4fc9.png">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/1.png">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/2.jpg">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/3.jpg">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/4.jpg">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/5.jpg">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/image-20231112162201802.png">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/6.jpg">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/image-20231112162750359.png">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/666.png">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/image-20231112163516181.png">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/a67c7b0ac52b21de7f0aa37147a2bd4d_out.gif">
+<meta property="og:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/777.jpg">
+<meta property="article:published_time" content="2023-11-12T08:02:48.000Z">
+<meta property="article:modified_time" content="2023-11-12T09:13:47.899Z">
+<meta property="article:author" content="雪之下雪乃">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/39521da6b6b2983a38ca8fe2525ba56e.gif">
+    
+        <link rel="alternate" href="/atom.xml" title="大帅哥的博客" type="application/atom+xml">
+    
+    
+        <link rel="shortcut icon" href="/images/favicon.ico">
+    
+    
+        
+<link rel="stylesheet" href="https://unpkg.com/typeface-source-code-pro@1.1.13/index.css">
+
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+    
+    
+    
+    
+    
+<script src="https://unpkg.com/pace-js@1.2.4/pace.min.js"></script>
+
+    
+        
+<link rel="stylesheet" href="https://unpkg.com/wowjs@1.1.3/css/libs/animate.css">
+
+        
+<script src="https://unpkg.com/wowjs@1.1.3/dist/wow.min.js"></script>
+
+        <script>
+          new WOW({
+            offset: 0,
+            mobile: true,
+            live: false
+          }).init();
+        </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+    <body>
+    
+<div id='loader'>
+  <div class="loading-left-bg"></div>
+  <div class="loading-right-bg"></div>
+  <div class="spinner-box">
+    <div class="loading-taichi">
+      <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+      <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="#ff6e6b" />
+      <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z" fill="#fd0d00" />
+      <path d="M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95" fill="#fd0d00" />
+    </svg>
+    </div>
+    <div class="loading-word">今日解签，宜开卷...</div>
+  </div>
+</div>
+</div>
+
+<script>
+  const endLoading = function() {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loader').classList.add("loading");
+  }
+  window.addEventListener('load', endLoading);
+  document.getElementById('loader').addEventListener('click', endLoading);
+</script>
+
+
+    <div id="container">
+        <div id="wrap">
+            <header id="header">
+    
+        <img data-src="/images/1.png" data-sizes="auto" alt="详细阐述通信原理" class="lazyload">
+    
+    <div id="header-outer" class="outer">
+        <div id="header-title" class="inner">
+            <div id="logo-wrap">
+                
+                    
+                    
+                        <a href="/" id="logo"><h1>详细阐述通信原理</h1></a>
+                    
+                
+            </div>
+            
+                
+                
+            
+        </div>
+        <div id="header-inner">
+            <nav id="main-nav">
+                <a id="main-nav-toggle" class="nav-icon"></a>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/">首页</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/archives">归档</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/about">关于</a>
+                    </span>
+                
+                    <span class="main-nav-link-wrap">
+                        <span class="main-nav-icon"></span>
+                        <a class="main-nav-link" href="/friend">友链</a>
+                    </span>
+                
+            </nav>
+            <nav id="sub-nav">
+                
+                    <a id="nav-rss-link" class="nav-icon" href="/atom.xml"
+                       title="RSS 订阅"></a>
+                
+                
+            </nav>
+            <div id="search-form-wrap">
+                <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+            </div>
+        </div>
+    </div>
+</header>
+
+            <div id="content" class="outer">
+                <section id="main"><article id="post-详细阐述通信原理" class="h-entry article article-type-post"
+         itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+    <div class="article-inner">
+        <div class="article-meta">
+            <div class="article-date wow slideInLeft">
+    <a href="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/" class="article-date-link">
+        <time datetime="2023-11-12T08:02:48.000Z"
+              itemprop="datePublished">2023-11-12</time>
+    </a>
+</div>
+
+            
+    <div class="article-category wow slideInLeft">
+        <a class="article-category-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">网络协议</a>
+    </div>
+
+
+        </div>
+        <div class="hr-line"></div>
+        
+
+        <div class="e-content article-entry" itemprop="articleBody">
+            
+                <h1 id="1-集线器的诞生"><a href="#1-集线器的诞生" class="headerlink" title="1.集线器的诞生"></a>1.集线器的诞生</h1><p>两个电脑可以用一根网线连接起来。如下图</p>
+<p><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/39521da6b6b2983a38ca8fe2525ba56e.gif" alt="39521da6b6b2983a38ca8fe2525ba56e"></p>
+<p>随着越来越多的人加入，你发现身上开的网口实在太多了，而且网线密密麻麻，混乱不堪。</p>
+<p>于是你们发明了一个中间设备，你们将网线都插到这个设备上，由这个设备做转发</p>
+<p><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/970a442a05739100c46b73c0fc371f90.jpg"></p>
+<p>你给它取名叫<strong>集线器</strong>，它仅仅是无脑将电信号<strong>转发到所有出口（广播）</strong>，不做任何处理，你觉得它是没有智商的，因此把人家定性在了<strong>物理层</strong>。</p>
+<p><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/39521da6b6b2983a38ca8fe2525ba56e-1699779489280.gif"></p>
+<p>由于转发到了所有出口，那 BCDE 四台机器怎么知道数据包是不是发给自己的呢？</p>
+<p>有一个更专业的，全局唯一的名字作为标识，你把这个更高端的名字称为 MAC 地址。</p>
+<p>你的 MAC 地址是 aa-aa-aa-aa-aa-aa，你的伙伴 b 的 MAC 地址是 bb-bb-bb-bb-bb-bb，以此类推，不重复就好。</p>
+<p>这样，A 在发送数据包给 B 时，只要在头部拼接一个这样结构的数据，就可以了。<br><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/f5f214620c73ce95ce6018ac5b0e4fc9.png"></p>
+<p>B 在收到数据包后，根据头部的目标 MAC 地址信息，判断这个数据包的确是发给自己的，于是便<strong>收下</strong>。</p>
+<p>其他的 CDE 收到数据包后，根据头部的目标 MAC 地址信息，判断这个数据包并不是发给自己的，于是便<strong>丢弃</strong>。</p>
+<p>虽然集线器使整个布局干净不少，但原来我只要发给电脑 B 的消息，现在却要发给连接到集线器中的所有电脑，这样既不安全，又不节省网络资源。</p>
+<h1 id="2-交换机的诞生"><a href="#2-交换机的诞生" class="headerlink" title="2.交换机的诞生"></a>2.交换机的诞生</h1><p>虽然只比集线器多了这一点点区别，但看起来似乎有智能了，你把这东西叫做<strong>交换机</strong>。也正因为这一点点智能，你把它放在了另一个层级，<strong>数据链路层</strong>。</p>
+<p><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/1.png"></p>
+<p>如上图所示，你是这样设计的。</p>
+<p>交换机内部维护一张 <strong>MAC 地址表</strong>，记录着每一个 MAC 地址的设备，连接在其哪一个端口上。</p>
+<p>假如你仍然要发给 B 一个数据包，构造了如下的数据结构从网口出去。到达交换机时，交换机内部通过自己维护的 MAC 地址表，发现<strong>目标机器 B 的 MAC 地址 bb-bb-bb-bb-bb-bb 映射到了端口 1 上</strong>，于是把数据从 1 号端口发给了 B，完事~</p>
+<p>你给这个通过这样传输方式而组成的小范围的网络，叫做<strong>以太网</strong>。</p>
+<p>最开始的时候，MAC 地址表是空的，经过该网络中的机器不断地通信，交换机最终将 MAC 地址表建立完毕~</p>
+<p>随着机器数量越多，交换机的端口也不够了，只要将多个交换机连接起来，这个问题就轻而易举搞定~</p>
+<p>但是你要注意，上面那根红色的线，最终在 MAC 地址表中可不是一条记录呀，而是要把 EFGH 这四台机器与该端口（端口6）的映射全部记录在表中。<br><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/2.jpg"></p>
+<p>交换机已经无法记录如此庞大的映射关系了。</p>
+<p>那我可不可以让那根红色的网线，接入一个新的设备，这个设备就跟电脑一样有自己独立的 MAC 地址，而且同时还能帮我把数据包做一次转发呢？</p>
+<p><strong>这个设备就是路由器，它的功能就是，作为一台独立的拥有 MAC 地址的设备，并且可以帮我把数据包做一次转发，你把它定在了网络层。</strong><br><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/3.jpg"></p>
+<p>注意，路由器的每一个端口，都有独立的 MAC 地址</p>
+<p>好了，现在交换机的 MAC 地址表中，只需要多出一条 MAC 地址 ABAB 与其端口的映射关系，就可以成功把数据包转交给路由器了，这条搞定。</p>
+<p>那如何做到，把发送给 C 和 D，甚至是把发送给 DEFGH…. 的数据包，统统先发送给路由器呢？</p>
+<p>不难想到这样一个点子，假如电脑 C 和 D 的 MAC 地址拥有共同的前缀，比如分别是</p>
+<p>C 的 MAC 地址：FFFF-FFFF-CCCC D 的 MAC 地址：FFFF-FFFF-DDDD</p>
+<p>那我们就可以说，将目标 MAC 地址为 FFFF-FFFF-？开头的，统统先发送给路由器。</p>
+<p>这样是否可行呢？答案是否定的。</p>
+<h2 id="IP地址的诞生"><a href="#IP地址的诞生" class="headerlink" title="IP地址的诞生"></a>IP地址的诞生</h2><p>我们先从现实中 MAC 地址的结构入手，MAC地址也叫物理地址、硬件地址，长度为 48 位，一般这样来表示</p>
+<p>00-16-EA-AE-3C-40</p>
+<p>它是由网络设备制造商生产时烧录在网卡的EPROM（一种闪存芯片，通常可以通过程序擦写）。</p>
+<p>其中前 24 位（00-16-EA）代表网络硬件制造商的编号，后 24 位（AE-3C-40）是该厂家自己分配的，一般表示系列号。</p>
+<p>只要不更改自己的 MAC 地址，MAC 地址在世界是唯一的。形象地说，MAC地址就如同身份证上的身份证号码，具有唯一性。</p>
+<p>那如果你希望向上面那样表示将目标 MAC 地址为 FFFF-FFFF-？开头的，统一从路由器出去发给某一群设备（后面会提到这其实是子网的概念），那你就需要要求某一子网下统统买一个厂商制造的设备，要么你就需要要求厂商在生产网络设备烧录 MAC 地址时，提前按照你规划好的子网结构来定 MAC 地址，并且日后这个网络的结构都不能轻易改变。</p>
+<p>这显然是不现实的。</p>
+<p>于是你发明了一个新的地址，给每一台机器一个 <strong>32 位的编号</strong>，如：</p>
+<p>11000000101010000000000000000001</p>
+<p>你觉得有些不清晰，于是把它分成四个部分，中间用点相连。</p>
+<p>11000000.10101000.00000000.00000001</p>
+<p>你还觉得不清晰，于是把它转换成 <strong>10 进制</strong>。</p>
+<p>192.168.0.1</p>
+<p>最后你给了这个地址一个响亮的名字，IP 地址。现在每一台电脑，同时有自己的 MAC 地址，又有自己的 IP 地址，<strong>只不过 IP 地址是软件层面上的，可以随时修改，MAC 地址一般是无法修改的。</strong></p>
+<p>这样一个可以随时修改的 IP 地址，就可以根据你规划的网络拓扑结构，来调整了。<br><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/4.jpg"></p>
+<p>如上图所示，假如我想要发送数据包给 ABCD 其中一台设备，不论哪一台，我都可以这样描述，**”将 IP 地址为 192.168.0 开头的全部发送给到路由器，之后再怎么转发，交给它！”**，巧妙吧。</p>
+<h2 id="路由器的诞生"><a href="#路由器的诞生" class="headerlink" title="路由器的诞生"></a>路由器的诞生</h2><p>路由器诞生了，专门负责IP地址的寻找。那报文交给路由器之后，路由器又是怎么把数据包准确转发给指定设备的呢？</p>
+<p>别急我们慢慢来。</p>
+<p>我们先给上面的组网方式中的每一台设备，加上自己的 IP 地址</p>
+<p>现在两个设备之间传输，除了加上数据链路层的头部之外，还要再增加一个网络层的头部。</p>
+<p>假如 A 给 B 发送数据，由于它们直接连着交换机，所以 A 直接发出如下数据包即可，其实网络层没有体现出作用。</p>
+<p><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/5.jpg"></p>
+<p>但假如 A 给 C 发送数据，A 就需要先转交给路由器，然后再由路由器转交给 C。由于最底层的传输仍然需要依赖以太网，所以数据包是分成两段的。</p>
+<p><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/image-20231112162201802.png"></p>
+<h2 id="子网的由来"><a href="#子网的由来" class="headerlink" title="子网的由来"></a>子网的由来</h2><p><strong>A 给 C 发数据包，怎么知道是否要通过路由器转发呢？</strong></p>
+<p><strong>答案：子网</strong></p>
+<p>如果源 IP 与目的 IP 处于一个子网，直接将包通过交换机发出去。</p>
+<p>如果源 IP 与目的 IP 不处于一个子网，就交给路由器去处理。</p>
+<p>好，那现在只需要解决，什么叫处于一个子网就好了。</p>
+<p>192.168.0.1 和 192.168.0.2 处于同一个子网<br>192.168.0.1 和 192.168.1.1 处于不同子网<br>这两个是我们人为规定的，即我们想表示，对于 192.168.0.1 来说：</p>
+<p>192.168.0.xxx 开头的，就算是在一个子网，否则就是在不同的子网。</p>
+<p>那对于计算机来说，怎么表达这个意思呢？于是人们发明了子网掩码的概念</p>
+<p>假如某台机器的子网掩码定为 255.255.255.0</p>
+<p>这表示，将源 IP 与目的 IP 分别同这个子网掩码进行与运算****，相等则是在一个子网，不相等就是在不同子网，就这么简单。</p>
+<h3 id="IP地址-网络地址-主机地址"><a href="#IP地址-网络地址-主机地址" class="headerlink" title="IP地址 &#x3D; 网络地址 + 主机地址"></a>IP地址 &#x3D; 网络地址 + 主机地址</h3><p>所以如果 A 给 C 发消息，A 和 C 的 IP 地址分别 &amp; A 机器配置的子网掩码，发现不相等，则 A 认为 C 和自己不在同一个子网，于是把包发给路由器，就不管了，之后怎么转发，A 不关心。</p>
+<p>A 如何知道，哪个设备是路由器？</p>
+<p><strong>答案：在 A 上要设置默认网关</strong></p>
+<p>上一步 A 通过是否与 C 在同一个子网内，判断出自己应该把包发给路由器，那路由器的 IP 是多少呢？</p>
+<p>其实说发给路由器不准确，应该说 A 会把包发给默认网关。</p>
+<p>对 A 来说，A 只能直接把包发给同处于一个子网下的某个 IP 上，所以发给路由器还是发给某个电脑，对 A 来说也不关心，只要这个设备有个 IP 地址就行。</p>
+<p>所以默认网关，就是 A 在自己电脑里配置的一个 IP 地址，以便在发给不同子网的机器时，发给这个 IP 地址。<br><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/6.jpg"></p>
+<h1 id="路由表的由来"><a href="#路由表的由来" class="headerlink" title="路由表的由来"></a>路由表的由来</h1><p>路由器如何知道C在哪里？</p>
+<p><strong>答案：路由表</strong></p>
+<p>现在 A 要给 C 发数据包，已经可以成功发到路由器这里了，最后一个问题就是，路由器怎么知道，收到的这个数据包，该从自己的哪个端口出去，才能直接（或间接）地最终到达目的地 C 呢。</p>
+<p>路由器收到的数据包有目的 IP 也就是 C 的 IP 地址，需要转化成从自己的哪个端口出去，很容易想到，应该有个表，就像 MAC 地址表一样。</p>
+<p>这个表就叫路由表。</p>
+<p>不同于 MAC 地址表的是，路由表并不是一对一这种明确关系，我们下面看一个路由表的结构<br><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/image-20231112162750359.png"></p>
+<p>我们学习一种新的表示方法，由于子网掩码其实就表示前多少位表示子网的网段，所以如 192.168.0.0（255.255.255.0） 也可以简写为 192.168.0.0&#x2F;24</p>
+<p>这就很好理解了，路由表就表示，<strong>192.168.0.xxx 这个子网下的，都转发到 0 号端口，192.168.1.xxx 这个子网下的，都转发到 1 号端口</strong>。</p>
+<h1 id="MAC与IP联系"><a href="#MAC与IP联系" class="headerlink" title="MAC与IP联系"></a>MAC与IP联系</h1><p><strong>刚才说的都是 IP 层，但发送数据包的数据链路层需要知道 MAC 地址，可是我只知道 IP 地址该怎么办呢？</strong></p>
+<p><strong>答案：arp</strong></p>
+<p>假如你（A）此时不知道你同伴 B 的 MAC 地址（现实中就是不知道的，刚刚我们只是假设已知），你只知道它的 IP 地址，你该怎么把数据包准确传给 B 呢？</p>
+<p>答案很简单，在网络层，我需要把 IP 地址对应的 MAC 地址找到，也就是通过某种方式，找到 192.168.0.2 对应的 MAC 地址 BBBB。</p>
+<p>这种方式就是 arp 协议，同时电脑 A 和 B 里面也会有一张 arp 缓存表，表中记录着 IP 与 MAC 地址的对应关系。<br>一开始的时候这个表是空的，电脑 A 为了知道电脑 B（192.168.0.2）的 MAC 地址，将会广播一条 arp 请求，B 收到请求后，带上自己的 MAC 地址给 A 一个响应。此时 A 便更新了自己的 arp 表。</p>
+<p>这样通过大家不断广播 arp 请求，最终所有电脑里面都将 arp 缓存表更新完整。<br>脑视角：<br>首先我要知道我的 IP 以及对方的 IP<br>通过子网掩码判断我们是否在同一个子网<br>在同一个子网就通过 arp 获取对方 mac 地址直接扔出去<br>不在同一个子网就通过 arp 获取默认网关的 mac 地址直接扔出去</p>
+<h1 id="三种视角详解"><a href="#三种视角详解" class="headerlink" title="三种视角详解"></a>三种视角详解</h1><h2 id="电脑视角："><a href="#电脑视角：" class="headerlink" title="电脑视角："></a>电脑视角：</h2><ul>
+<li>首先我要知道我的 IP 以及对方的 IP</li>
+<li>通过子网掩码判断我们是否在同一个子网</li>
+<li>在同一个子网就通过 arp 获取对方 mac 地址直接扔出去</li>
+<li>不在同一个子网就通过 arp 获取默认网关的 mac 地址直接扔出去</li>
+</ul>
+<h2 id="交换机视角："><a href="#交换机视角：" class="headerlink" title="交换机视角："></a>交换机视角：</h2><ul>
+<li>我收到的数据包必须有目标 MAC 地址</li>
+<li>通过 MAC 地址表查映射关系</li>
+<li>查到了就按照映射关系从我的指定端口发出去</li>
+<li>查不到就所有端口都发出去</li>
+</ul>
+<h2 id="路由器视角："><a href="#路由器视角：" class="headerlink" title="路由器视角："></a><strong>路由器视角：</strong></h2><ul>
+<li><p>我收到的数据包必须有目标 IP 地址</p>
+</li>
+<li><p>通过路由表查映射关系</p>
+</li>
+<li><p>查到了就按照映射关系从我的指定端口发出去（不在任何一个子网范围，走其路由器的默认网关也是查到了）</p>
+</li>
+<li><p>查不到则返回一个路由不可达的数据包</p>
+</li>
+</ul>
+<h2 id="网络层（IP协议）本身没有传输包的功能，包的实际传输是委托给数据链路层（以太网中的交换机）来实现的。"><a href="#网络层（IP协议）本身没有传输包的功能，包的实际传输是委托给数据链路层（以太网中的交换机）来实现的。" class="headerlink" title="网络层（IP协议）本身没有传输包的功能，包的实际传输是委托给数据链路层（以太网中的交换机）来实现的。"></a>网络层（IP协议）本身没有传输包的功能，包的实际传输是委托给数据链路层（以太网中的交换机）来实现的。</h2><p>涉及到的三张表分别是</p>
+<p>交换机中有 MAC 地址表用于映射 MAC 地址和它的端口<br>路由器中有路由表用于映射 IP 地址(段)和它的端口<br>电脑和路由器中都有** arp 缓存表**用于缓存 IP 和 MAC 地址的映射关系<br>这三张表是怎么来的</p>
+<p>MAC 地址表是通过以太网内各节点之间不断通过交换机通信，不断完善起来的。<br>路由表是各种路由算法 + 人工配置逐步完善起来的。<br>arp 缓存表是不断通过 arp 协议的请求逐步完善起来的。<br>知道了以上这些，目前网络上两个节点是如何发送数据包的这个过程，就完全可以解释通了！</p>
+<p><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/666.png"></p>
+<p>这时路由器 1 连接了路由器 2，所以其路由表有了下一条地址这一个概念，所以它的路由表就变成了这个样子。如果匹配到了有下一跳地址的一项，则需要再次匹配，找到其端口，并找到下一跳 IP 的 MAC 地址。</p>
+<p>也就是说找来找去，<strong>最终必须能映射到一个端口号，然后从这个端口号把数据包发出去。</strong><br><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/image-20231112163516181.png"></p>
+<h2 id="这时如果-A-给-F-发送一个数据包，能不能通呢？如果通的话整个过程是怎样的呢？"><a href="#这时如果-A-给-F-发送一个数据包，能不能通呢？如果通的话整个过程是怎样的呢？" class="headerlink" title="这时如果 A 给 F 发送一个数据包，能不能通呢？如果通的话整个过程是怎样的呢？"></a>这时如果 A 给 F 发送一个数据包，能不能通呢？如果通的话整个过程是怎样的呢？</h2><h2 id><a href="#" class="headerlink" title></a><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/a67c7b0ac52b21de7f0aa37147a2bd4d_out.gif"></h2><p>详细过程文字描述：</p>
+<ol>
+<li><p>首先 A（192.168.0.1）通过子网掩码（255.255.255.0）计算出自己与 F（192.168.2.2）并不在同一个子网内，于是决定发送给默认网关（192.168.0.254）</p>
+</li>
+<li><p>A 通过 ARP 找到 默认网关 192.168.0.254 的 MAC 地址。</p>
+</li>
+<li><p>A 将源 MAC 地址（AAAA）与网关 MAC 地址（ABAB）封装在数据链路层头部，又将源 IP 地址（192.168.0.1）和目的 IP 地址（192.168.2.2）（注意这里千万不要以为填写的是默认网关的 IP 地址，从始至终这个数据包的两个 IP 地址都是不变的，只有 MAC 地址在不断变化）封装在网络层头部，然后发包<br><img src="/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/777.jpg"></p>
+</li>
+<li><p>交换机 1 收到数据包后，发现目标 MAC 地址是 ABAB，转发给路由器1</p>
+</li>
+<li><p>数据包来到了路由器 1，发现其目标 IP 地址是 192.168.2.2，查看其路由表，发现了下一跳的地址是 192.168.100.5*</p>
+</li>
+<li><p>所以此时路由器 1 需要做两件事，第一件是再次匹配路由表，发现匹配到了端口为 2，于是将其封装到数据链路层，最后把包从 2 号口发出去。</p>
+</li>
+<li><p>此时路由器 2 收到了数据包，看到其目的地址是 192.168.2.2，查询其路由表，匹配到端口号为 1，准备从 1 号口把数据包送出去。</p>
+</li>
+<li><p>但此时路由器 2 需要知道 192.168.2.2 的 MAC 地址了，于是查看其 arp 缓存，找到其 MAC 地址为 FFFF，将其封装在数据链路层头部，并从 1 号端口把包发出去。</p>
+</li>
+<li><p>交换机 3 收到了数据包，发现目的 MAC 地址为 FFFF，查询其 MAC 地址表，发现应该从其 6 号端口出去，于是从 6 号端口把数据包发出去。</p>
+</li>
+</ol>
+<p>10.F 最终收到了数据包！**并且发现目的 MAC 地址就是自己，于是收下了这个包</p>
+
+            
+        </div>
+        <footer class="article-footer">
+            <a data-url="http://example.com/2023/11/12/%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/" data-id="clov9fwhr0007w4zc61mt1qcs" data-title="详细阐述通信原理"
+               class="article-share-link">分享</a>
+            
+            
+            
+            
+    <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a></li></ul>
+
+
+        </footer>
+    </div>
+    
+        
+    <nav id="article-nav" class="wow fadeInUp">
+        
+        
+            <div class="article-nav-link-wrap article-nav-link-right">
+                
+                    
+                    
+                        <img data-src="/covers/girl_smile_wall_1092234_1920x1080.jpg" data-sizes="auto" alt="网络概念和TCP/IP基本知识" class="lazyload">
+                    
+                
+                <a href="/2023/11/12/%E7%BD%91%E7%BB%9C%E6%A6%82%E5%BF%B5%E5%92%8CTCP-IP%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86/"></a>
+                <div class="article-nav-caption">后一篇</div>
+                <h3 class="article-nav-title">
+                    
+                        网络概念和TCP/IP基本知识
+                    
+                </h3>
+            </div>
+        
+    </nav>
+
+
+    
+</article>
+
+
+
+
+
+
+
+
+
+
+
+</section>
+                
+                    <aside id="sidebar">
+    <div class="sidebar-wrap wow fadeInRight">
+        <div class="sidebar-author">
+            <img data-src="/avatar/avatar.jpg" data-sizes="auto" alt="雪之下雪乃" class="lazyload">
+            <div class="sidebar-author-name">雪之下雪乃</div>
+            <div class="sidebar-description"></div>
+        </div>
+        <div class="sidebar-state">
+            <div class="sidebar-state-article">
+                <div>文章</div>
+                <div class="sidebar-state-number">4</div>
+            </div>
+            <div class="sidebar-state-category">
+                <div>分类</div>
+                <div class="sidebar-state-number">2</div>
+            </div>
+            <div class="sidebar-state-tag">
+                <div>标签</div>
+                <div class="sidebar-state-number">2</div>
+            </div>
+        </div>
+        <div class="sidebar-social">
+            
+                <div class=icon-github>
+                    <a href=https://github.com/yourname itemprop="url" target="_blank"></a>
+                </div>
+            
+                <div class=icon-google>
+                    <a href=https://plus.google.com/yourname itemprop="url" target="_blank"></a>
+                </div>
+            
+                <div class=icon-twitter>
+                    <a href=https://twitter.com/yourname itemprop="url" target="_blank"></a>
+                </div>
+            
+                <div class=icon-facebook>
+                    <a href=https://www.facebook.com/yourname itemprop="url" target="_blank"></a>
+                </div>
+            
+        </div>
+        <div class="sidebar-menu">
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">首页</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/archives"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">归档</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/about"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">关于</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/friend"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">友链</div>
+                </div>
+            
+        </div>
+    </div>
+    
+        
+    <div class="widget-wrap wow fadeInRight">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%90%9C%E7%B4%A2%E5%AD%A6%E4%B9%A0/">搜索学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">网络协议</a></li></ul>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="widget-wrap wow fadeInRight">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Google/" style="font-size: 10px;">Google</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 20px;">网络</a>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="widget-wrap wow fadeInRight">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">十一月 2023</a></li></ul>
+        </div>
+    </div>
+
+
+    
+</aside>
+
+                
+            </div>
+            <footer id="footer" class="wow fadeInUp">
+    <div style="width: 100%; overflow: hidden"><div class="footer-line"></div></div>
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            
+            <div>
+                <span class="icon-copyright"></span>
+                2023.11.11-2023
+                <span class="footer-info-sep"></span>
+                雪之下雪乃
+            </div>
+            
+                <div>
+                    基于&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>&nbsp;
+                    Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" target="_blank">Reimu</a>
+                </div>
+            
+            
+                <div>
+                    <span class="icon-brush"></span>
+                    6.6k
+                    &nbsp;|&nbsp;
+                    <span class="icon-coffee"></span>
+                    00:23
+                </div>
+            
+            
+                <div>
+                    <span class="icon-eye"></span>
+                    <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+                    &nbsp;|&nbsp;
+                    <span class="icon-user"></span>
+                    <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+                </div>
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+        <nav id="mobile-nav">
+    <div class="sidebar-wrap">
+        <div class="sidebar-author">
+            <img data-src="/avatar/avatar.jpg" data-sizes="auto" alt="雪之下雪乃" class="lazyload">
+            <div class="sidebar-author-name">雪之下雪乃</div>
+            <div class="sidebar-description"></div>
+        </div>
+        <div class="sidebar-state">
+            <div class="sidebar-state-article">
+                <div>文章</div>
+                <div class="sidebar-state-number">4</div>
+            </div>
+            <div class="sidebar-state-category">
+                <div>分类</div>
+                <div class="sidebar-state-number">2</div>
+            </div>
+            <div class="sidebar-state-tag">
+                <div>标签</div>
+                <div class="sidebar-state-number">2</div>
+            </div>
+        </div>
+        <div class="sidebar-social">
+            
+                <div class=icon-github>
+                    <a href=https://github.com/yourname itemprop="url" target="_blank"></a>
+                </div>
+            
+                <div class=icon-google>
+                    <a href=https://plus.google.com/yourname itemprop="url" target="_blank"></a>
+                </div>
+            
+                <div class=icon-twitter>
+                    <a href=https://twitter.com/yourname itemprop="url" target="_blank"></a>
+                </div>
+            
+                <div class=icon-facebook>
+                    <a href=https://www.facebook.com/yourname itemprop="url" target="_blank"></a>
+                </div>
+            
+        </div>
+        <div class="sidebar-menu">
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">首页</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/archives"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">归档</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/about"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">关于</div>
+                </div>
+            
+                <div class="sidebar-menu-link-wrap">
+                    <a class="sidebar-menu-link-dummy" href="/friend"></a>
+                    <span class="sidebar-menu-icon"></span>
+                    <div class="sidebar-menu-link">友链</div>
+                </div>
+            
+        </div>
+    </div>
+</nav>
+
+        
+<script src="https://unpkg.com/jquery@3.7.0/dist/jquery.min.js"></script>
+
+
+<script src="https://unpkg.com/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://unpkg.com/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+    
+<script src="https://unpkg.com/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+
+
+    
+<script src="https://unpkg.com/busuanzi@2.3.0/bsz.pure.mini.js"></script>
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+    <div class="site-search">
+        <div class="algolia-popup popup">
+            <div class="algolia-search">
+                <span class="algolia-search-input-icon"></span>
+                <div class="algolia-search-input" id="algolia-search-input"></div>
+            </div>
+
+            <div class="algolia-results">
+                <div id="algolia-stats"></div>
+                <div id="algolia-hits"></div>
+                <div id="algolia-pagination" class="algolia-pagination"></div>
+            </div>
+
+            <span class="popup-btn-close"></span>
+        </div>
+    </div>
+    <!-- hexo injector body_end start -->
+<script src="/js/insertHighlight.js"></script>
+<!-- hexo injector body_end end --></body>
+    </html>
+
